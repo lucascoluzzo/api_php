@@ -5,6 +5,7 @@
 
     class UsuarioController
     {
+        
         public function get($id = null) 
         {
             if ($id) {
@@ -21,13 +22,21 @@
             return Usuario::insert($data);
         }
 
-        public function put($id) 
+        public function put($id = null) 
         {
-            return Usuario::select($id);
+            $_PUT = [];
+
+            if (!strcasecmp($_SERVER['REQUEST_METHOD'], 'PUT')) {
+                parse_str(file_get_contents('php://input'), $_PUT);
+            }
+
+            $data = $_PUT;
+
+            return Usuario::put($id, $data);
         }
 
-        public function delete() 
+        public function delete($id = null) 
         {
-            
+            return Usuario::delete($id);
         }
     }

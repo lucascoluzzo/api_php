@@ -60,11 +60,39 @@
             }
         }
 
-        public static function put($id) {
+        public static function put($id, $data) {
 
+            $connect = new Connect;
+            $connPdo = $connect->getConnection();
+
+            $sql = 'UPDATE '.self::$table.' SET nome = :nome, cidade = :cidade, estado = :estado WHERE id = :id';
+            $stmt = $connPdo->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindValue(':nome', $data['nome']);
+            $stmt->bindValue(':cidade', $data['cidade']);
+            $stmt->bindValue(':estado', $data['estado']);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return 'Usuário(a) Atualizado com sucesso!';
+            } else {
+                throw new \Exception("Falha ao Atualizar usuário(a)!");
+            }
         }
 
-        public static function delete($id) {
+        public static function delete(int $id) {
 
+            $connect = new Connect;
+            $connPdo = $connect->getConnection();
+
+            $sql = 'DELETE FROM '.self::$table.' WHERE id = :id';
+            $stmt = $connPdo->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return 'Usuário(a) Deletado com sucesso!';
+            } else {
+                throw new \Exception("Falha ao Deletar usuário(a)!");
+            }
         }
     }
